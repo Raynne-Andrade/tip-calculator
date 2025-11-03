@@ -1,5 +1,3 @@
-// src/composables/useCurrency.ts
-
 import { ref, watch } from 'vue';
 import { ExchangeRateResponse, Rates, Currency } from '../types';
 
