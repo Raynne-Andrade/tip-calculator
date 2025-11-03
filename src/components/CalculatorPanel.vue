@@ -22,16 +22,12 @@ const emit = defineEmits<{
   'update:tip-percentage': [value: number]
   'update:number-of-people': [value: number]
   'update:currency': [value: 'USD' | 'EUR']
-  calculate: []
 }>()
 
 const currencySymbol = computed<string>(() => {
   return props.selectedCurrency === 'EUR' ? '€' : '$'
 })
 
-const nextPage = (): void => {
-    emit('next')
-}
 
 const handleCurrencyChange = (newCurrency: 'USD' | 'EUR'): void => {
   emit('update:currency', newCurrency)
@@ -91,7 +87,7 @@ const handleNumberOfPeopleChange = (newNumberOfPeople: number): void => {
 <style lang="scss" scoped>
 .input-panel {
    min-width: 400px;
-      @media (max-width: 768px) {
+    @media (max-width: 768px) {
       min-width: 320px;
     }
   &__title {

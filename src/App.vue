@@ -79,13 +79,13 @@ watch(selectedCurrency, handleCalculate())
       <CalculatorPanel v-if="!showResultInMobile || !isMobile" :bill-amount="billAmount" :tip-percentage="tipPercentage"
         :number-of-people="numberOfPeople" :selected-currency="selectedCurrency"
         @update:bill-amount="billAmount = $event" @update:tip-percentage="tipPercentage = $event"
-        @update:number-of-people="numberOfPeople = $event" @update:currency="handleCurrencyChange" @next="handleNext" />
+        @update:number-of-people="numberOfPeople = $event" @update:currency="handleCurrencyChange" />
 
       <ResultPanel v-if="showResultInMobile || !isMobile" :bill-amount="billAmount" :tip-amount="tipAmount"
         :total-amount="totalAmount" :conversionBRL='conversionBRL' :per-person-amount="perPersonAmount"
-        :selected-currency="selectedCurrency" :conversion-brl="conversionBRL" @back="handleBack" />
+        :selected-currency="selectedCurrency" :conversion-brl="conversionBRL"  />
 
-      <span v-if="isMobile && billAmount" class='tip-calculator__next'>
+      <span v-if="isMobile && billAmount" class='tip-calculator__button'>
         <Back v-if="showResultInMobile" @click="handleBack" />
         <Next v-else @click="handleNext" />
       </span>
@@ -131,7 +131,7 @@ watch(selectedCurrency, handleCalculate())
 
   }
 
-  &__next {
+  &__button {
     background: green;
     border-radius: 100%;
     padding: 10px 15px;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 interface Props {
   billAmount: number
@@ -17,10 +17,6 @@ const props = withDefaults(defineProps<Props>(), {
   perPersonAmount: 0,
   selectedCurrency: 'USD',
 })
-
-const emit = defineEmits<{
-  back: []
-}>()
 
 interface Item {
   label: string,
@@ -55,7 +51,7 @@ const formatCurrency = (value: number): string => {
     </div>
 
     <div v-if="conversionBRL" class="result-panel__conversion-box">
-      <p class="result-panel__conversion-label">Conversão para BRL:</p>
+      <p class="result-panel__conversion-label">Conversão para Real:</p>
       <p class="result-panel__conversion-value">R$ {{ formatCurrency(conversionBRL) }}</p>
     </div>
 
