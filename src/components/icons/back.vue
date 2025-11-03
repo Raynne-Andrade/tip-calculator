@@ -1,12 +1,7 @@
 <script setup lang="ts">
-interface Props {
-    width: number
-    height: number
-    color: string
+import { iconsProps } from '../../types';
 
-}
-
-const props = withDefaults(defineProps < Props > (), {
+const props = withDefaults(defineProps<iconsProps>(), {
     width: 24,
     height: 24,
     color: '#eee'

@@ -1,34 +1,23 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { ResultPanelProps, ResultItem } from '../types';
 
-interface Props {
-  billAmount: number
-  tipAmount: number
-  totalAmount: number
-  perPersonAmount: number
-  selectedCurrency: 'USD' | 'EUR'
-  conversionBRL: number | null
-}
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<ResultPanelProps>(), {
   billAmount: 0,
   tipAmount: 0,
   totalAmount: 0,
   perPersonAmount: 0,
   selectedCurrency: 'USD',
-})
+  conversionBRL: null,
+});
 
-interface Item {
-  label: string,
-  value: number
-}
-
-const BillValues = computed<Item[]>(() => [
+const BillValues = computed<ResultItem[]>(() => [
   { label: 'Gorjeta', value: props.tipAmount },
   { label: 'Conta', value: props.billAmount },
   { label: 'Por pessoa', value: props.perPersonAmount },
-  { label: 'Total', value: props.totalAmount }
-])
+  { label: 'Total', value: props.totalAmount },
+]);
 
 const currencySymbol = computed<string>(() => {
   return props.selectedCurrency === 'EUR' ? '€' : '$'

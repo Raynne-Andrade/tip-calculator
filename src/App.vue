@@ -1,25 +1,23 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { useCurrency } from './services/useCurrency';
 import CalculatorPanel from './components/CalculatorPanel.vue'
 import ResultPanel from './components/ResultPanel.vue'
 import Next from './components/icons/next.vue';
 import Back from './components/icons/back.vue';
 
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+import { Currency } from './types';
 
-interface ExchangeRateResponse {
-  rates: {
-    BRL: number
-  }
-}
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 const showResultInMobile = ref<boolean>(false)
 const billAmount = ref<number>(0)
 const tipPercentage = ref<number>(10)
 const numberOfPeople = ref<number>(2)
-const selectedCurrency = ref<'USD' | 'EUR'>('USD')
-const exchangeRate = ref<number | null>(null)
-const conversionBRL = ref<number | null>(null)
+const selectedCurrency = ref<Currency>('USD');
+
+const { exchangeRate, conversionBRL, fetchExchangeRate } = useCurrency(selectedCurrency);
+
 
 const tipAmount = computed<number>(() => {
   return (billAmount.value * tipPercentage.value) / 100
@@ -34,22 +32,16 @@ const perPersonAmount = computed<number>(() => {
   return numberOfPeople.value > 0 ? totalAmount.value / numberOfPeople.value : 0
 })
 
-const fetchExchangeRate = async (): Promise<void> => {
-  try {
-    const response = await fetch(
-      `https://economia.awesomeapi.com.br/json/last/${selectedCurrency.value}-BRL`
-    )
-    const data: ExchangeRateResponse = await response.json()
-
-    exchangeRate.value = selectedCurrency.value === "USD" ? data.USDBRL.bid : data.EURBRL.bid
-    conversionBRL.value = perPersonAmount.value * exchangeRate.value
-  } catch (error) {
-    console.error('Erro ao buscar taxa de câmbio:', error)
+const convertToBRL = () => {
+  if (exchangeRate.value && exchangeRate.value.BRL) {
+    conversionBRL.value = perPersonAmount.value * exchangeRate.value.BRL;
   }
-}
+};
 
 const handleCalculate = async (): Promise<void> => {
-  await fetchExchangeRate()
+  if (billAmount) {
+    await fetchExchangeRate();
+  }
 }
 
 const handleBack = (): void => {
@@ -64,7 +56,8 @@ const handleCurrencyChange = (newCurrency: 'USD' | 'EUR'): void => {
   selectedCurrency.value = newCurrency
 }
 
-watch(selectedCurrency, handleCalculate())
+watch(selectedCurrency, handleCalculate)
+watch([perPersonAmount, exchangeRate], convertToBRL);
 
 </script>
 
@@ -83,7 +76,7 @@ watch(selectedCurrency, handleCalculate())
 
       <ResultPanel v-if="showResultInMobile || !isMobile" :bill-amount="billAmount" :tip-amount="tipAmount"
         :total-amount="totalAmount" :conversionBRL='conversionBRL' :per-person-amount="perPersonAmount"
-        :selected-currency="selectedCurrency" :conversion-brl="conversionBRL"  />
+        :selected-currency="selectedCurrency" :conversion-brl="conversionBRL" />
 
       <span v-if="isMobile && billAmount" class='tip-calculator__button'>
         <Back v-if="showResultInMobile" @click="handleBack" />

@@ -8,7 +8,6 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
     numberSelected: 0
-
 })
 
 const emit = defineEmits<{

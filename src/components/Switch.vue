@@ -1,17 +1,11 @@
 <script setup lang="ts">
+import { Currency, SwitchProps } from '../types';
 
-interface Props {
-    selectedCurrency: 'USD' | 'EUR'
-}
-
-const props = withDefaults(defineProps<Props>(), {
-    selectedCurrency: 'USD'
-})
+const props = defineProps<SwitchProps>();
 
 const emit = defineEmits<{
-    'update:currency': [value: 'USD' | 'EUR']
-}>()
-
+    (e: 'update:currency', value: Currency): void;
+}>();
 
 const handleCurrencyChange = (currency: 'USD' | 'EUR'): void => {
     emit('update:currency', currency === 'USD' ? 'EUR' : 'USD')

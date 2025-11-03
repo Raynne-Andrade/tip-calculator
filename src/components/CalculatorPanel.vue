@@ -2,27 +2,22 @@
 import { computed } from 'vue'
 import Switch from './Switch.vue'
 import InputRange from './InputRange.vue'
+import { Currency, CalculatorPanelProps } from '../types';
 
-interface Props {
-  billAmount: number
-  tipPercentage: number
-  numberOfPeople: number
-  selectedCurrency: 'USD' | 'EUR'
-}
-
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<CalculatorPanelProps>(), {
   billAmount: 0,
   tipPercentage: 10,
   numberOfPeople: 2,
-  selectedCurrency: 'USD'
-})
+  selectedCurrency: 'USD' as Currency,
+});
+
 
 const emit = defineEmits<{
-  'update:bill-amount': [value: number]
-  'update:tip-percentage': [value: number]
-  'update:number-of-people': [value: number]
-  'update:currency': [value: 'USD' | 'EUR']
-}>()
+  (e: 'update:bill-amount', value: number): void;
+  (e: 'update:tip-percentage', value: number): void;
+  (e: 'update:number-of-people', value: number): void;
+  (e: 'update:currency', value: Currency): void;
+}>();
 
 const currencySymbol = computed<string>(() => {
   return props.selectedCurrency === 'EUR' ? '€' : '$'
@@ -86,10 +81,12 @@ const handleNumberOfPeopleChange = (newNumberOfPeople: number): void => {
 
 <style lang="scss" scoped>
 .input-panel {
-   min-width: 400px;
-    @media (max-width: 768px) {
-      min-width: 320px;
-    }
+  min-width: 400px;
+
+  @media (max-width: 768px) {
+    min-width: 320px;
+  }
+
   &__title {
     color: #333;
     margin-bottom: 1.5rem;
