@@ -101,10 +101,3 @@ O projeto estará acessível em `http://localhost:5173/`.
 | Comando | Descrição |
 | :--- | :--- |
 | `npm run dev` | Inicia o servidor de desenvolvimento. |
-
-
-
-
-## 📄 Licença
-
-Este projeto está licenciado sob a Licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
